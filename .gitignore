@@ -1,0 +1,6 @@
+Backend/node_modules
+Backend/.env
+Backend/input_format
+Backend/password.js
+
+Frontend/node_modules
