@@ -9,7 +9,7 @@ import { checkAuth } from "./authSlice";
 import { useDispatch,useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Navigate } from "react-router";
-import ProblemPage from "./pages/problemPage";
+import ProblemPage from "./pages/ProblemPage";
 import AdminDelete from "./Components/AdminDelete";
 import AdminPanel from "./Components/AdminPanel";
 
