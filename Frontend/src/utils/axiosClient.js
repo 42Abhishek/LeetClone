@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-    baseURL : "http://localhost:5000",
+    baseURL : "https://leetclone-backend-12q5.onrender.com",
     withCredentials: true,
     headers :{
         'Content-Type' : "application/json"
