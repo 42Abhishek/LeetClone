@@ -11,7 +11,7 @@ const submitRouter = require("./routes/submit");
 const cors = require('cors');
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://leetclone-frontend.onrender.com',
     credentials: true
 }))
 
