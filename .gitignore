@@ -1,6 +1,9 @@
 Backend/node_modules
 Backend/.env
-Backend/input_format
+Backend/input_format.js
 Backend/password.js
 
 Frontend/node_modules
+
+.DS_Store
+*.log
