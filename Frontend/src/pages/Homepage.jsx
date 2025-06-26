@@ -8,6 +8,8 @@ function Homepage() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [problems, setProblems] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [solvedProblems, setSolvedProblems] = useState([]);
   const [filters, setFilters] = useState({
     difficulty: 'all',
@@ -15,31 +17,34 @@ function Homepage() {
     status: 'all' 
   });
 
-  // console.log(user);
-
-
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const { data } = await axiosClient.get('/problem/getAllProblem');
-        setProblems(data);
+        const d = await axiosClient.get(`/problem/getAllProblem?page=${page}&limit=5`);
+        setProblems(d.data.problems);
+        setTotalPages(d.data.totalPages);
       } catch (error) {
         console.error('Error fetching problems:', error);
       }
     };
 
+    fetchProblems();
+  
+  }, [page]);
+
+  useEffect(() => {
+    
     const fetchSolvedProblems = async () => {
       try {
-        const { data } = await axiosClient.get('/problem/problemSolvedByUser');
-        setSolvedProblems(data);
+        const d = await axiosClient.get(`/problem/problemSolvedByUser?page=${page}&limit=5`);
+        setSolvedProblems(d.data.paginatedProblems);
       } catch (error) {
         console.error('Error fetching solved problems:', error);
       }
     };
 
-    fetchProblems();
     if (user) fetchSolvedProblems();
-  }, [user]);
+  }, [user,page]);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -145,6 +150,32 @@ function Homepage() {
             </div>
           ))}
         </div>
+
+         <div>
+          <div className="flex justify-center items-center gap-4 mt-6">
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+          >
+            Previous
+          </button>
+
+          <span className="text-sm text-gray-700">
+            Page <span className="font-semibold">{page}</span> of <span className="font-semibold">{totalPages}</span>
+          </span>
+
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+          >
+            Next
+          </button>
+        </div>
+
+        </div>
+
       </div>
     </div>
   );
