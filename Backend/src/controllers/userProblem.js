@@ -158,17 +158,33 @@ const getProblemById = async (req,res) => {
 const getAllProblem = async (req,res) => {
     
     try{
-       
-        const getProblem = await Problem.find({}).select('_id title difficulty tags');
+        const searchQuery = req.query.search || "";
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
 
-        if(!getProblem)
-            return res.status(404).send("There is no problem");
+        const skip = (page - 1) * limit;
 
-        res.status(200).send(getProblem);
+        const filter = {
+            title : { $regex: searchQuery, $options: "i"}
+        }
+
+        const problems = await Problem.find(filter)
+        .skip(skip)
+        .limit(limit)
+        .select("_id title difficulty tags");
+
+        const total = await Problem.countDocuments();
+
+        res.json({
+            problems,
+            total,
+            page,
+            totalPages: Math.ceil(total/limit)
+        });
     }catch(err){
-
-        res.status(500).send("Error: " + err);
+        res.status(500).json({error : "Server error"});
     }
+
 }
 
 const solvedAllProblembyUser = async (req,res) => {
@@ -176,15 +192,39 @@ const solvedAllProblembyUser = async (req,res) => {
     try{
        const userId = req.result._id;
 
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+
+        const skip = (page - 1) * limit;
+
+       
        const user = await User.findById(userId).populate({
         path: "problemSolved",
         select: "_id title difficulty tags"
        });
 
-       res.status(200).send(user.problemSolved);
+       console.log(user);
+
+       if(!user){
+        return res.status(404).json({message: 'User not found'});
+       }
+
+       const total = user.problemSolved.length;
+
+       console.log(total);
+
+       const paginatedProblems = user.problemSolved.slice(skip, skip + limit);
+
+       res.json({
+            paginatedProblems,
+            total,
+            page,
+            totalPages: Math.ceil(total/limit)
+        });
     }catch(err){
         res.status(500).send("Server Error");
     }
+
 }
 
 const submittedProblem = async (req,res) => {
