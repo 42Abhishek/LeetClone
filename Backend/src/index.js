@@ -10,8 +10,18 @@ const redisClient = require("./config/redis");
 const submitRouter = require("./routes/submit");
 const cors = require('cors');
 
+const allowedOrigins = [
+  'http://localhost:5173',      
+  'https://leetclone-frontend.onrender.com'
+]
 app.use(cors({
-    origin: 'https://leetclone-frontend.onrender.com',
+    origin: function(origin, callback){
+        if(!origin || allowedOrigins.includes(origin)){
+            callback(null, true);
+        }else{
+            callback(new Error("Not allowed CORS"));
+        }
+    },
     credentials: true
 }))
 
