@@ -53,7 +53,7 @@ function Homepage() {
 
   const filteredProblems = problems.filter(problem => {
     const difficultyMatch = filters.difficulty === 'all' || problem.difficulty === filters.difficulty;
-    const tagMatch = filters.tag === 'all' || problem.tags === filters.tag;
+    const tagMatch = filters.tag === 'all' || problem.tags.some(tag => tag === filters.tag);
     const statusMatch = filters.status === 'all' || 
                       solvedProblems.some(sp => sp._id === problem._id);
     return difficultyMatch && tagMatch && statusMatch;
@@ -114,6 +114,7 @@ function Homepage() {
             <option value="linkedList">Linked List</option>
             <option value="graph">Graph</option>
             <option value="dp">DP</option>
+            <option value="math">Math</option>
           </select>
         </div>
 
