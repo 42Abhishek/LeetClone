@@ -187,7 +187,7 @@ const runCode = async (req,res) =>{
     }
 
 
-    console.log(success , testResult);
+
 
     res.status(201).json({
       success: status,

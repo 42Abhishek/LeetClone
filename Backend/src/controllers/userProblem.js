@@ -203,7 +203,7 @@ const solvedAllProblembyUser = async (req,res) => {
         select: "_id title difficulty tags"
        });
 
-       console.log(user);
+    
 
        if(!user){
         return res.status(404).json({message: 'User not found'});
@@ -211,7 +211,7 @@ const solvedAllProblembyUser = async (req,res) => {
 
        const total = user.problemSolved.length;
 
-       console.log(total);
+     
 
        const paginatedProblems = user.problemSolved.slice(skip, skip + limit);
 
@@ -242,7 +242,7 @@ const submittedProblem = async (req,res) => {
     res.status(200).send(ans);
 
    }catch(err){
-       console.log("dld");
+       
         res.status(500).send("Internal Server Error");
    }
 }
